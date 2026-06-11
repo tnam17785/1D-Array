@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tất Tần Tật Về Mảng 1 Chiều</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --code-bg: #1e1e1e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            background: #fff;
+            padding: 0.5rem;
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        /* Minh họa mảng trực quan */
+        .array-visual {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .array-box {
+            border: 2px solid var(--primary);
+            background: #eff6ff;
+            min-width: 60px;
+            text-align: center;
+            margin: 0 2px;
+            border-radius: 4px;
+        }
+
+        .array-value {
+            padding: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 1px solid #bfdbfe;
+        }
+
+        .array-index {
+            padding: 5px;
+            font-size: 0.85rem;
+            background: #dbeafe;
+            color: var(--secondary);
+        }
+
+        /* Khối code */
+        pre {
+            background: var(--code-bg);
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+        }
+
+        .lang-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: -1px;
+        }
+
+        .tab-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background: var(--code-bg);
+            color: white;
+        }
+
+        .code-container {
+            display: none;
+        }
+
+        .code-container.active {
+            display: block;
+        }
+
+        /* Bảng so sánh */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+        }
+
+        .badge {
+            background: #e11d48;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Làm Chủ Mảng 1 Chiều (1D Array)</h1>
+        <p>Từ lý thuyết nền tảng đến thực hành thuật toán kinh điển</p>
+    </header>
+
+    <nav>
+        <a href="#khai-niem">Khái Niệm</a>
+        <a href="#minh-hoa">Trực Quan</a>
+        <a href="#cu-phap">Cú Pháp Code</a>
+        <a href="#thao-tac">Thao Tác Cơ Bản</a>
+        <a href="#bai-tap">Bài Tập Kinh Điển</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- 1. KHÁI NIỆM -->
+        <section id="khai-niem">
+            <h2>1. Mảng 1 Chiều Là Gì?</h2>
+            <p><strong>Mảng 1 chiều</strong> là một tập hợp các phần tử có <strong>cùng kiểu dữ liệu</strong>, được lưu trữ liên tiếp nhau trong bộ nhớ máy tính (RAM).</p>
+            <ul>
+                <li><strong>Chỉ số (Index):</strong> Bắt đầu từ <strong>0</strong> đến <strong>n-1</strong> (với n là số phần tử).</li>
+                <li><strong>Kích thước cố định:</strong> Khi đã khai báo, kích thước mảng thường không thể thay đổi (đối với mảng tĩnh).</li>
+                <li><strong>Truy cập ngẫu nhiên:</strong> Có thể truy cập trực tiếp bất kỳ phần tử nào thông qua chỉ số với tốc độ cực nhanh <code class="badge">O(1)</code>.</li>
+            </ul>
+        </section>
+
+        <!-- 2. MINH HỌA TRỰC QUAN -->
+        <section id="minh-hoa">
+            <h2>2. Minh Họa Trực Quan</h2>
+            <p>Giả sử ta có một mảng số nguyên gồm 5 phần tử: <code>[10, 25, 8, 44, 12]</code></p>
+            
+            <div class="array-visual">
+                <div class="array-box">
+                    <div class="array-value">10</div>
+                    <div class="array-index">index 0</div>
+                </div>
+                <div class="array-box">
+                    <div class="array-value">25</div>
+                    <div class="array-index">index 1</div>
+                </div>
+                <div class="array-box">
+                    <div class="array-value">8</div>
+                    <div class="array-index">index 2</div>
+                </div>
+                <div class="array-box">
+                    <div class="array-value">44</div>
+                    <div class="array-index">index 3</div>
+                </div>
+                <div class="array-box">
+                    <div class="array-value">12</div>
+                    <div class="array-index">index 4</div>
+                </div>
+            </div>
+            <p style="text-align: center; font-style: italic; color: #64748b;">Lưu ý: Để lấy giá trị số 8, ta gọi: <code>TenMang[2]</code></p>
+        </section>
+
+        <!-- 3. CÚ PHÁP KHAI BÁO -->
+        <section id="cu-phap">
+            <h2>3. Cú Pháp Khai Báo & Khởi Tạo</h2>
+            <p>Chọn ngôn ngữ bạn muốn xem:</p>
+            
+            <div class="lang-tabs">
+                <button class="tab-btn active" onclick="switchLang('cpp')">C++</button>
+                <button class="tab-btn" onclick="switchLang('java')">Java</button>
+                <button class="tab-btn" onclick="switchLang('py')">Python</button>
+            </div>
+
+            <!-- C++ Code -->
+            <div id="cpp-code" class="code-container active">
+                <pre><code>// Khai báo mảng tĩnh 5 phần tử chưa có giá trị
+int arr[5]; 
+
+// Khai báo và khởi tạo giá trị ban đầu
+int numbers[] = {10, 25, 8, 44, 12};
+
+// Truy cập và thay đổi giá trị
+numbers[1] = 30; // Thay 25 bằng 30</code></pre>
+            </div>
+
+            <!-- Java Code -->
+            <div id="java-code" class="code-container">
+                <pre><code>// Khai báo và cấp phát bộ nhớ cho mảng 5 phần tử
+int[] arr = new int[5];
+
+// Khai báo và khởi tạo nhanh
+int[] numbers = {10, 25, 8, 44, 12};
+
+// Gán giá trị mới
+numbers[1] = 30;</code></pre>
+            </div>
+
+            <!-- Python Code -->
+            <div id="py-code" class="code-container">
+                <pre><code># Python không có mảng tĩnh gốc, thường dùng List (Mảng động)
+numbers = [10, 25, 8, 44, 12]
+
+# Truy cập và thay đổi giá trị
+numbers[1] = 30
+
+# Python hỗ trợ duyệt ngược bằng chỉ số âm
+print(numbers[-1]) # Lấy phần tử cuối cùng (12)</code></pre>
+            </div>
+        </section>
+
+        <!-- 4. THAO TÁC CƠ BẢN -->
+        <section id="thao-tac">
+            <h2>4. Các Thao Tác Cơ Bản Trên Mảng</h2>
+            <table>
+                <tr>
+                    <th>Thao tác</th>
+                    <th>Giải thích</th>
+                    <th>Độ phức tạp (Độ nhanh)</th>
+                </tr>
+                <tr>
+                    <td><strong>Truy cập (Access)</strong></td>
+                    <td>Đọc hoặc ghi giá trị tại một vị trí <code>i</code> biết trước.</td>
+                    <td><code class="badge" style="background:#16a34a">O(1)</code> - Tức thời</td>
+                </tr>
+                <tr>
+                    <td><strong>Tìm kiếm (Search)</strong></td>
+                    <td>Quét từ đầu đến cuối mảng để tìm một giá trị cụ thể.</td>
+                    <td><code class="badge">O(n)</code> - Tuyến tính</td>
+                </tr>
+                <tr>
+                    <td><strong>Thêm / Xóa</strong></td>
+                    <td>Chèn hoặc xóa phần tử ở giữa mảng (phải dịch chuyển các phần tử khác).</td>
+                    <td><code class="badge">O(n)</code> - Chậm</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- 5. BÀI TẬP KINH ĐIỂN -->
+        <section id="bai-tap">
+            <h2>5. Thuật Toán Kinh Điển (Code Mẫu C++)</h2>
+            
+            <h3>Bài 1: Tính tổng và tìm số lớn nhất (Max) trong mảng</h3>
+            <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int arr[] = {10, 25, 8, 44, 12};
+    int n = 5;
+    
+    int tong = 0;
+    int max_val = arr[0]; // Giả định phần tử đầu là lớn nhất
+
+    for(int i = 0; i < n; i++) {
