@@ -5,12 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tất Tần Tật Về Mảng 1 Chiều</title>
     <style>
+        /* Định nghĩa biến màu cho Chế độ sáng (Light Mode) */
         :root {
             --primary: #2563eb;
             --secondary: #1e40af;
             --bg: #f8fafc;
+            --card-bg: #ffffff;
             --text: #0f172a;
+            --text-secondary: #64748b;
             --code-bg: #1e1e1e;
+            --border: #e2e8f0;
+            --visual-box: #eff6ff;
+            --visual-index: #dbeafe;
+            --table-th: #f1f5f9;
+        }
+
+        /* Định nghĩa biến màu cho Chế độ tối (Dark Mode) */
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --visual-box: #1e293b;
+            --visual-index: #334155;
+            --table-th: #334155;
+            --primary: #3b82f6;
+            --secondary: #60a5fa;
         }
 
         body {
@@ -20,10 +41,11 @@
             padding: 0;
             background-color: var(--bg);
             color: var(--text);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #2563eb, #1e40af);
             color: white;
             padding: 2rem 1rem;
             text-align: center;
@@ -31,16 +53,18 @@
         }
 
         nav {
-            background: #fff;
+            background: var(--card-bg);
             padding: 0.5rem;
             position: sticky;
             top: 0;
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             z-index: 100;
             flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
         }
 
         nav a {
@@ -57,6 +81,30 @@
             color: white;
         }
 
+        /* Nút liên kết đặc biệt sang trang cũ */
+        nav a.prev-web-btn {
+            background: #10b981;
+            color: white;
+        }
+        nav a.prev-web-btn:hover {
+            background: #059669;
+        }
+
+        /* Nút Dark Mode */
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
         .container {
             max-width: 1000px;
             margin: 2rem auto;
@@ -64,16 +112,17 @@
         }
 
         section {
-            background: white;
+            background: var(--card-bg);
             padding: 2rem;
             margin-bottom: 2rem;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
         }
 
         h2 {
             color: var(--primary);
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid var(--border);
             padding-bottom: 0.5rem;
             margin-top: 0;
         }
@@ -89,7 +138,7 @@
 
         .array-box {
             border: 2px solid var(--primary);
-            background: #eff6ff;
+            background: var(--visual-box);
             min-width: 60px;
             text-align: center;
             margin: 0 2px;
@@ -100,14 +149,14 @@
             padding: 10px;
             font-size: 1.2rem;
             font-weight: bold;
-            border-bottom: 1px solid #bfdbfe;
+            border-bottom: 1px solid var(--border);
         }
 
         .array-index {
             padding: 5px;
             font-size: 0.85rem;
-            background: #dbeafe;
-            color: var(--secondary);
+            background: var(--visual-index);
+            color: var(--text);
         }
 
         /* Khối code */
@@ -128,7 +177,8 @@
         }
 
         .tab-btn {
-            background: #e2e8f0;
+            background: var(--border);
+            color: var(--text);
             border: none;
             padding: 0.5rem 1rem;
             cursor: pointer;
@@ -157,13 +207,13 @@
         }
 
         th, td {
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border);
             padding: 0.75rem;
             text-align: left;
         }
 
         th {
-            background: #f1f5f9;
+            background: var(--table-th);
         }
 
         .badge {
@@ -183,11 +233,16 @@
     </header>
 
     <nav>
+        <!-- THAY ĐỔI TÊN FILE CŨ VÀO ĐÂY ĐỂ LIÊN KẾT -->
+        <a href="index_cu.html" class="prev-web-btn">⬅️ Quay lại Trang Bữa</a>
+        
         <a href="#khai-niem">Khái Niệm</a>
         <a href="#minh-hoa">Trực Quan</a>
         <a href="#cu-phap">Cú Pháp Code</a>
         <a href="#thao-tac">Thao Tác Cơ Bản</a>
         <a href="#bai-tap">Bài Tập Kinh Điển</a>
+        
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 Dark Mode</button>
     </nav>
 
     <div class="container">
@@ -230,7 +285,7 @@
                     <div class="array-index">index 4</div>
                 </div>
             </div>
-            <p style="text-align: center; font-style: italic; color: #64748b;">Lưu ý: Để lấy giá trị số 8, ta gọi: <code>TenMang[2]</code></p>
+            <p style="text-align: center; font-style: italic; color: var(--text-secondary);">Lưu ý: Để lấy giá trị số 8, ta gọi: <code>TenMang[2]</code></p>
         </section>
 
         <!-- 3. CÚ PHÁP KHAI BÁO -->
@@ -272,55 +327,3 @@ numbers[1] = 30;</code></pre>
             <div id="py-code" class="code-container">
                 <pre><code># Python không có mảng tĩnh gốc, thường dùng List (Mảng động)
 numbers = [10, 25, 8, 44, 12]
-
-# Truy cập và thay đổi giá trị
-numbers[1] = 30
-
-# Python hỗ trợ duyệt ngược bằng chỉ số âm
-print(numbers[-1]) # Lấy phần tử cuối cùng (12)</code></pre>
-            </div>
-        </section>
-
-        <!-- 4. THAO TÁC CƠ BẢN -->
-        <section id="thao-tac">
-            <h2>4. Các Thao Tác Cơ Bản Trên Mảng</h2>
-            <table>
-                <tr>
-                    <th>Thao tác</th>
-                    <th>Giải thích</th>
-                    <th>Độ phức tạp (Độ nhanh)</th>
-                </tr>
-                <tr>
-                    <td><strong>Truy cập (Access)</strong></td>
-                    <td>Đọc hoặc ghi giá trị tại một vị trí <code>i</code> biết trước.</td>
-                    <td><code class="badge" style="background:#16a34a">O(1)</code> - Tức thời</td>
-                </tr>
-                <tr>
-                    <td><strong>Tìm kiếm (Search)</strong></td>
-                    <td>Quét từ đầu đến cuối mảng để tìm một giá trị cụ thể.</td>
-                    <td><code class="badge">O(n)</code> - Tuyến tính</td>
-                </tr>
-                <tr>
-                    <td><strong>Thêm / Xóa</strong></td>
-                    <td>Chèn hoặc xóa phần tử ở giữa mảng (phải dịch chuyển các phần tử khác).</td>
-                    <td><code class="badge">O(n)</code> - Chậm</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- 5. BÀI TẬP KINH ĐIỂN -->
-        <section id="bai-tap">
-            <h2>5. Thuật Toán Kinh Điển (Code Mẫu C++)</h2>
-            
-            <h3>Bài 1: Tính tổng và tìm số lớn nhất (Max) trong mảng</h3>
-            <pre><code>#include &lt;iostream&gt;
-using namespace std;
-
-int main() {
-    int arr[] = {10, 25, 8, 44, 12};
-    int n = 5;
-    
-    int tong = 0;
-    int max_val = arr[0]; // Giả định phần tử đầu là lớn nhất
-
-    for(int i = 0; i < n; i++) {
